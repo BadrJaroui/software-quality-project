@@ -1,4 +1,5 @@
-from DeleteOwnAccount import DeleteOwnAccount
+from DBOperations import DeleteAccount
+from CurrentLoggedInUser import currentUserID
 
 def sys_admin_ui():
     print("1. Delete Account")
@@ -6,4 +7,7 @@ def sys_admin_ui():
     input_value = input()
     
     if input_value == '1':
-        DeleteOwnAccount()
+        # Add a confirmation
+        DeleteAccount(currentUserID)
+        # Return to login screen
+        

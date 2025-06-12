@@ -1,1 +1,1 @@
-currentUser = None
+currentUserID = None
