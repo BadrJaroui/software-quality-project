@@ -8,9 +8,7 @@ def create_db(db_folder="database", db_filename="scooter.db"):
         os.makedirs(db_folder)
         print(f"Created database folder: {db_folder}")
 
-def 
-
 
 # Example usage:
 if __name__ == "__main__":
-    initialize_database()
+    create_db()
