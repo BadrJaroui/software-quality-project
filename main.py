@@ -1,9 +1,9 @@
 from SysAdminUI import sys_admin_ui
-from DBOperations import populate_roles
-from DBOperations import clear_database
+from database_stuff.DBOperations import populate_roles
+from database_stuff.DBOperations import clear_database
 
 def main():
-    pass
+    sys_admin_ui()
 
 if __name__ == "__main__":
     # TODO: INPUT VALIDATION & ERROR HANDLING IN add_traveller.py

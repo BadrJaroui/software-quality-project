@@ -1,4 +1,4 @@
-from DBOperations import create_traveller
+from database_stuff.DBOperations import create_traveller
 
 def add_traveller():
     print("Enter a first name: ")

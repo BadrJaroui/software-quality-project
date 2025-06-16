@@ -1,5 +1,28 @@
 import sqlite3
 
+def update_traveller(id, updates, path = "database/scooter.db"):
+    if not updates:
+        print("No updates provided.")
+        return
+
+    conn = sqlite3.connect(path)
+    cursor = conn.cursor()
+
+    set_clause = ", ".join(f"{column} = ?" for column in updates)
+    values = list(updates.values())
+    values.append(id)
+
+    sql = f"UPDATE travellers SET {set_clause} WHERE id = ?"
+
+    try:
+        cursor.execute(sql, values)
+        conn.commit()
+        print(f"Updated traveller {id} successfully.")
+    except sqlite3.Error as e:
+        print(f"An error occurred: {e}")
+    finally:
+        conn.close()
+
 def DeleteAccount(id, path = "database/scooter.db"):
     conn = sqlite3.connect(path)
     cursor = conn.cursor()
