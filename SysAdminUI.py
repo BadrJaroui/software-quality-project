@@ -4,6 +4,7 @@ from database_stuff.DBOperations import DeleteAccount
 from database_stuff.backup_db import backup_db
 from CurrentLoggedInUser import currentUserID
 from utils.clear_terminal import clear_terminal
+from datetime import datetime
 
 def sys_admin_ui():
     while True:
@@ -28,7 +29,8 @@ def sys_admin_ui():
 
         if input_value == "3":
             clear_terminal()
-            backup_db()
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            backup_db(f"db_backups/backupscooter_{timestamp}.zip")
             input("Press Enter to return to menu.")
         
         if input_value == '4':
