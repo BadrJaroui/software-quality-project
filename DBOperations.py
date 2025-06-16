@@ -12,6 +12,19 @@ def DeleteAccount(id, path = "database/scooter.db"):
     finally:
         conn.close()
 
+def create_traveller(traveller_data, path = "database/scooter.db"):
+    conn = sqlite3.connect(path)
+    cursor = conn.cursor()
+
+    cursor.execute('''
+    INSERT INTO travellers (FirstName, LastName, Birthday, Gender, ZipCode, City, EmailAddress, MobilePhone, LicenseNumber)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+''', traveller_data)
+    
+    conn.commit()
+    conn.close()
+
+
 def populate_roles(path = "database/scooter.db"):
     roles = [(1, "super_admin"), (2, "system_admin"), (3, "service_engineer")]
 
