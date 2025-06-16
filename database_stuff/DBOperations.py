@@ -1,5 +1,28 @@
 import sqlite3
 
+def update_traveller(id, updates, path = "database/scooter.db"):
+    if not updates:
+        print("No updates provided.")
+        return
+
+    conn = sqlite3.connect(path)
+    cursor = conn.cursor()
+
+    set_clause = ", ".join(f"{column} = ?" for column in updates)
+    values = list(updates.values())
+    values.append(id)
+
+    sql = f"UPDATE travellers SET {set_clause} WHERE id = ?"
+
+    try:
+        cursor.execute(sql, values)
+        conn.commit()
+        print(f"Updated traveller {id} successfully.")
+    except sqlite3.Error as e:
+        print(f"An error occurred: {e}")
+    finally:
+        conn.close()
+
 def DeleteAccount(id, path = "database/scooter.db"):
     conn = sqlite3.connect(path)
     cursor = conn.cursor()
@@ -11,6 +34,19 @@ def DeleteAccount(id, path = "database/scooter.db"):
         print(f"Error deleting account: {ex}")
     finally:
         conn.close()
+
+def create_traveller(traveller_data, path = "database/scooter.db"):
+    conn = sqlite3.connect(path)
+    cursor = conn.cursor()
+
+    cursor.execute('''
+    INSERT INTO travellers (FirstName, LastName, Birthday, Gender, ZipCode, City, EmailAddress, MobilePhone, LicenseNumber)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+''', traveller_data)
+    
+    conn.commit()
+    conn.close()
+
 
 def populate_roles(path = "database/scooter.db"):
     roles = [(1, "super_admin"), (2, "system_admin"), (3, "service_engineer")]
