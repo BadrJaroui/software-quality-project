@@ -9,6 +9,7 @@ def create_db(db_folder="database", db_filename="scooter.db"):
         print(f"Created database folder: {db_folder}")
 
 
+
 # Example usage:
 if __name__ == "__main__":
     create_db()
