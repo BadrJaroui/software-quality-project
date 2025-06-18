@@ -1,0 +1,31 @@
+from utils.clear_terminal import clear_terminal
+
+def service_engineer_ui():
+    while True:
+        clear_terminal()
+        print("1. Search scooter information")
+        print("2. Update scooter attributes")
+        print("3. Update password")
+        print("4. Logout")
+        
+        input_value = input()
+
+        if input_value == "1":
+            clear_terminal()
+            
+            input("Press Enter to return to menu.")
+            
+        if input_value == "2":
+            clear_terminal()
+            
+            input("Press Enter to return to menu.")
+
+        if input_value == "3":
+            clear_terminal()
+            
+            input("Press Enter to return to menu.")
+
+        if input_value == "4":
+            clear_terminal()
+            currentUserID = None
+            break
