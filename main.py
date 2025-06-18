@@ -2,9 +2,9 @@ import os
 from SysAdminUI import sys_admin_ui
 from logging_file import create_log_file
 from logging_file import add_log_entry
-from utils.encryption import load_public_key
 from database_stuff.DBOperations import populate_roles
 from database_stuff.DBOperations import clear_database
+from security.security import load_encryption_key
 
 def main():
     log_entry = {
@@ -15,9 +15,13 @@ def main():
         "Suspicious": "False"
     }
     path = "logs/activity_log.csv"
-    key = load_public_key(secrets_dir=os.path.join("utils", "secrets"))
+    key = load_encryption_key()
 
     add_log_entry(log_entry, path, key)
+
+def clear_terminal():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 
 if __name__ == "__main__":
     # TODO: INPUT VALIDATION & ERROR HANDLING IN add_traveller.py

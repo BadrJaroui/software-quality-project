@@ -1,0 +1,84 @@
+import sqlite3
+
+class DatabaseManager:
+    def __init__(self, db_path):
+        self.db_path = db_path
+
+    def execute_query(self, query, params=(), fetch_one=False, fetch_all=False):
+        conn = None
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            cursor.execute(query, params)
+            conn.commit()
+            if fetch_one:
+                return cursor.fetchone()
+            if fetch_all:
+                return cursor.fetchall()
+            return True
+        except sqlite3.Error as e:
+            print(f"Database query error: {e}")
+            return False
+        finally:
+            if conn:
+                conn.close()
+
+    # -------- SCOOTERS --------
+    def create_scooter(self, **fields):
+        keys = ', '.join(fields.keys())
+        placeholders = ', '.join(['?'] * len(fields))
+        query = f"INSERT INTO scooters ({keys}) VALUES ({placeholders})"
+        return self.execute_query(query, tuple(fields.values()))
+
+    def update_scooter(self, scooter_id, **updates):
+        set_clause = ', '.join([f"{k} = ?" for k in updates])
+        query = f"UPDATE scooters SET {set_clause} WHERE id = ?"
+        return self.execute_query(query, tuple(updates.values()) + (scooter_id,))
+
+    def delete_scooter(self, scooter_id):
+        return self.execute_query("DELETE FROM scooters WHERE id = ?", (scooter_id,))
+
+    def search_scooter(self, **criteria):
+        where_clause = ' AND '.join([f"{k} = ?" for k in criteria])
+        query = f"SELECT * FROM scooters WHERE {where_clause}" if criteria else "SELECT * FROM scooters"
+        return self.execute_query(query, tuple(criteria.values()), fetch_all=True)
+
+    # -------- TRAVELLERS --------
+    def create_traveller(self, **fields):
+        keys = ', '.join(fields.keys())
+        placeholders = ', '.join(['?'] * len(fields))
+        query = f"INSERT INTO travellers ({keys}) VALUES ({placeholders})"
+        return self.execute_query(query, tuple(fields.values()))
+
+    def update_traveller(self, traveller_id, **updates):
+        set_clause = ', '.join([f"{k} = ?" for k in updates])
+        query = f"UPDATE travellers SET {set_clause} WHERE id = ?"
+        return self.execute_query(query, tuple(updates.values()) + (traveller_id,))
+
+    def delete_traveller(self, traveller_id):
+        return self.execute_query("DELETE FROM travellers WHERE id = ?", (traveller_id,))
+
+    def search_traveller(self, **criteria):
+        where_clause = ' AND '.join([f"{k} = ?" for k in criteria])
+        query = f"SELECT * FROM travellers WHERE {where_clause}" if criteria else "SELECT * FROM travellers"
+        return self.execute_query(query, tuple(criteria.values()), fetch_all=True)
+
+    # -------- USERS --------
+    def create_user(self, **fields):
+        keys = ', '.join(fields.keys())
+        placeholders = ', '.join(['?'] * len(fields))
+        query = f"INSERT INTO users ({keys}) VALUES ({placeholders})"
+        return self.execute_query(query, tuple(fields.values()))
+
+    def update_user(self, user_id, **updates):
+        set_clause = ', '.join([f"{k} = ?" for k in updates])
+        query = f"UPDATE users SET {set_clause} WHERE id = ?"
+        return self.execute_query(query, tuple(updates.values()) + (user_id,))
+
+    def delete_user(self, user_id):
+        return self.execute_query("DELETE FROM users WHERE id = ?", (user_id,))
+
+    def search_user(self, **criteria):
+        where_clause = ' AND '.join([f"{k} = ?" for k in criteria])
+        query = f"SELECT * FROM users WHERE {where_clause}" if criteria else "SELECT * FROM users"
+        return self.execute_query(query, tuple(criteria.values()), fetch_all=True)
