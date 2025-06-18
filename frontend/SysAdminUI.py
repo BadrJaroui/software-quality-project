@@ -1,9 +1,9 @@
-from add_traveller import add_traveller
-from update_traveller import update_traveller_ui
-from database_stuff.DBOperations import DeleteAccount
+from frontend.create import add_traveller
+from frontend.update import update_traveller
+from frontend.delete import delete_traveller
 from database.backup_db import backup_db
 from utils.CurrentLoggedInUser import currentUserID
-from utils.clear_terminal import clear_terminal
+from utils.utils import clear_terminal
 from datetime import datetime
 
 def sys_admin_ui():
@@ -24,7 +24,7 @@ def sys_admin_ui():
 
         if input_value == "2":
             clear_terminal()
-            update_traveller_ui()
+            update_traveller()
             input("Press Enter to return to menu.")
 
         if input_value == "3":
@@ -36,7 +36,7 @@ def sys_admin_ui():
         if input_value == '4':
             # Add a confirmation
             clear_terminal()
-            DeleteAccount(currentUserID)
+            delete_traveller(currentUserID)
             input("Press Enter to return to menu.")
 
         if input_value == "5":
