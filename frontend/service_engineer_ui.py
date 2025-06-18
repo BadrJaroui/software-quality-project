@@ -1,4 +1,7 @@
-from utils.clear_terminal import clear_terminal
+from main import clear_terminal
+from database.methods import DatabaseManager
+from frontend.scooter_ui import search_scooter_ui
+from frontend.scooter_ui import update_scooter
 
 def service_engineer_ui():
     while True:
@@ -12,12 +15,12 @@ def service_engineer_ui():
 
         if input_value == "1":
             clear_terminal()
-            
+            search_scooter_ui()
             input("Press Enter to return to menu.")
             
         if input_value == "2":
             clear_terminal()
-            
+            update_scooter()
             input("Press Enter to return to menu.")
 
         if input_value == "3":
