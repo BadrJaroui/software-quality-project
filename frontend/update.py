@@ -1,6 +1,7 @@
 from database.methods import DatabaseManager
 from security.security import hash_password, check_password, validate_password, validate_username
 from utils.utils import update_password
+from utils.utils import get_role_by_id
 from utils.CurrentLoggedInUser import currentUserID
 
 def update_traveller():
@@ -41,11 +42,15 @@ def update_scooter():
     scooter_id = input("Enter the ID of the scooter to update: ")
 
     print("Enter new values (leave blank to skip updating a field):")
-    brand = input("Brand: ")
-    model = input("Model: ")
-    serial_number = input("Serial number: ")
-    top_speed = input("Top speed: ")
-    battery_capacity = input("Battery capacity: ")
+
+    brand = model = serial_number = top_speed = battery_capacity = None
+    if get_role_by_id(currentUserID).lower() == "system admin" or get_role_by_id(currentUserID).lower() == "super admin":
+        brand = input("Brand: ")
+        model = input("Model: ")
+        serial_number = input("Serial number: ")
+        top_speed = input("Top speed: ")
+        battery_capacity = input("Battery capacity: ")
+
     state_of_charge = input("State of charge: ")
     target_range = input("Target range: ")
     location = input("Location: ")
@@ -113,8 +118,9 @@ def update_user():
         print("No updates provided.")
 
 def update_password_ui():
-    db = DatabaseManager("urban_mobility.db")
-    current_user = db.search_user(id = currentUserID)
+    db = DatabaseManager("database/data/urban_mobility.db")
+    current_user = db.search_user(id=currentUserID)
+
     current_pass = current_user[0][2]
 
     while True:
@@ -124,10 +130,11 @@ def update_password_ui():
             print("This is not a valid password.")
             continue
 
-        elif not check_password(new_pass, current_pass):
+        elif check_password(new_pass, current_pass):
             print("This password is already being used. Please use a new password.")
             continue
 
         else:
             update_password(currentUserID, hash_password(new_pass))
             print("Password has been updated.")
+            break
