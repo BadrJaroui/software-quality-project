@@ -2,7 +2,7 @@ from add_traveller import add_traveller
 from update_traveller import update_traveller_ui
 from database_stuff.DBOperations import DeleteAccount
 from database.backup_db import backup_db
-from CurrentLoggedInUser import currentUserID
+from utils.CurrentLoggedInUser import currentUserID
 from utils.clear_terminal import clear_terminal
 from datetime import datetime
 
