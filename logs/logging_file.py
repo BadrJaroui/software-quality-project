@@ -1,4 +1,4 @@
-from utils.encryption import encrypt_message
+from security.security import encrypt_data
 import csv
 import os
 
@@ -17,11 +17,11 @@ def add_log_entry(log_entry, path, key):
     with open(path, 'a', newline='', encoding='utf-8') as f:
         writer = csv.DictWriter(f, fieldnames=["Date", "Time", "Username", "Description", "Suspicious"])
         encrypted_log = {
-            "Date": encrypt_message(key, log_entry["Date"]),
-            "Time": encrypt_message(key, log_entry["Time"]),
-            "Username": encrypt_message(key, log_entry["Username"]),
-            "Description": encrypt_message(key, log_entry["Description"]),
-            "Suspicious": encrypt_message(key, log_entry["Suspicious"]),
+            "Date": encrypt_data(log_entry["Date"]),
+            "Time": encrypt_data(log_entry["Time"]),
+            "Username": encrypt_data(log_entry["Username"]),
+            "Description": encrypt_data(log_entry["Description"]),
+            "Suspicious": encrypt_data(log_entry["Suspicious"]),
         }
         writer.writerow(encrypted_log)
 
