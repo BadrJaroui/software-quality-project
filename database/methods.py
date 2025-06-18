@@ -63,10 +63,21 @@ class DatabaseManager:
     def delete_traveller(self, traveller_id):
         return self.execute_query("DELETE FROM travellers WHERE id = ?", (traveller_id,))
 
-    def search_traveller(self, **criteria):
-        where_clause = ' AND '.join([f"{k} = ?" for k in criteria])
-        query = f"SELECT * FROM travellers WHERE {where_clause}" if criteria else "SELECT * FROM travellers"
-        return self.execute_query(query, tuple(criteria.values()), fetch_all=True)
+    def search_traveller(self, id=None, first_name=None, last_name=None, email_address=None):
+        if id is not None:
+            query = "SELECT * FROM travellers WHERE id = ?"
+            return self.execute_query(query, (id,), fetch_one=True)
+        elif first_name is not None:
+            query = "SELECT * FROM travellers WHERE first_name_enc = ?"
+            return self.execute_query(query, (first_name,), fetch_one=True)
+        elif last_name is not None:
+            query = "SELECT * FROM travellers WHERE last_name_enc = ?"
+            return self.execute_query(query, (last_name,), fetch_one=True)
+        elif email_address is not None:
+            query = "SELECT * FROM travellers WHERE email_address_enc = ?"
+            return self.execute_query(query, (email_address,), fetch_one=True)
+        else:
+            return None
 
     # -------- USERS --------
     def create_user(self, **fields):
