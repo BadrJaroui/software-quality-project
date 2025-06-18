@@ -2,7 +2,7 @@ import os
 from database.database import DatabaseManager
 from frontend.search import search_traveller_ui
 from frontend.create import add_scooter
-from frontend.SysAdminUI import sys_admin_ui
+from frontend.sys_admin_ui import sys_admin_ui
 from frontend.service_engineer_ui import service_engineer_ui
 from logs.logging_file import create_log_file
 from logs.logging_file import add_log_entry
