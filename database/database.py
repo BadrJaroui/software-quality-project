@@ -34,7 +34,6 @@ class DatabaseManager:
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS travellers (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    customer_id TEXT UNIQUE NOT NULL,
                     first_name_enc TEXT NOT NULL,
                     last_name_enc TEXT NOT NULL,
                     birthday_enc TEXT,

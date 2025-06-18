@@ -1,6 +1,8 @@
 from database.methods import DatabaseManager
 
 def search_scooter_ui():
+    db = DatabaseManager()
+
     while True:
         print("Search on:\n1. ID\n2. serial number")
         user_input = input()
@@ -9,11 +11,11 @@ def search_scooter_ui():
         if user_input == "1":
             print("Type an ID:")
             id = input()
-            scooter = DatabaseManager.search_scooter(id, None)
+            scooter = db.search_scooter(id, None)
         elif user_input == "2":
             print("Type a serial number:")
             serial = input()
-            scooter = DatabaseManager.search_scooter(None, serial)
+            scooter = db.search_scooter(None, serial)
 
         if not scooter == None:
             print(scooter)
@@ -23,6 +25,8 @@ def search_scooter_ui():
             break
 
 def update_scooter():
+    db = DatabaseManager()
+
     field_choices = []
     field_updates = {}
 
@@ -62,4 +66,4 @@ def update_scooter():
         new_field = input(f"Enter new {field}: ")
         field_updates[field] = new_field
 
-    DatabaseManager.update_scooter(id_input, field_updates)
+    db.update_scooter(id_input, **field_updates)
