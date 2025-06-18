@@ -38,10 +38,15 @@ class DatabaseManager:
     def delete_scooter(self, scooter_id):
         return self.execute_query("DELETE FROM scooters WHERE id = ?", (scooter_id,))
 
-    def search_scooter(self, **criteria):
-        where_clause = ' AND '.join([f"{k} = ?" for k in criteria])
-        query = f"SELECT * FROM scooters WHERE {where_clause}" if criteria else "SELECT * FROM scooters"
-        return self.execute_query(query, tuple(criteria.values()), fetch_all=True)
+    def search_scooter(self, id=None, serial_number=None):
+        if id is not None:
+            query = "SELECT * FROM scooters WHERE id = ?"
+            return self.execute_query(query, (id,), fetch_one=True)
+        elif serial_number is not None:
+            query = "SELECT * FROM scooters WHERE serial_number = ?"
+            return self.execute_query(query, (serial_number,), fetch_one=True)
+        else:
+            return None
 
     # -------- TRAVELLERS --------
     def create_traveller(self, **fields):
