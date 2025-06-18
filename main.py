@@ -10,7 +10,7 @@ from logs.logging_file import add_log_entry
 from security.security import load_encryption_key
 
 def main():
-    search_traveller_ui()
+    service_engineer_ui()
 
 if __name__ == "__main__":
     # TODO: INPUT VALIDATION & ERROR HANDLING IN add_traveller.py
