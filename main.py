@@ -1,7 +1,7 @@
 import os
 from SysAdminUI import sys_admin_ui
-from logging_file import create_log_file
-from logging_file import add_log_entry
+from logs.logging_file import create_log_file
+from logs.logging_file import add_log_entry
 from database_stuff.DBOperations import populate_roles
 from database_stuff.DBOperations import clear_database
 from security.security import load_encryption_key
