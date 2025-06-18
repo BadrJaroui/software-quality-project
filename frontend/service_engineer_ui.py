@@ -1,7 +1,7 @@
 from utils.utils import clear_terminal
 from database.methods import DatabaseManager
-from frontend.scooter_ui import search_scooter_ui
-from frontend.scooter_ui import update_scooter
+from frontend.search import search_scooter_ui
+from frontend.update import update_scooter
 from frontend.update import update_password_ui
 
 def service_engineer_ui():
