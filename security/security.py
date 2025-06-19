@@ -1,5 +1,6 @@
 import bcrypt # You'll need to install this: pip install bcrypt
 from cryptography.fernet import Fernet # You'll need to install this: pip install cryptography
+from datetime import datetime
 import re
 import os
 
@@ -47,7 +48,6 @@ def hash_password(password):
 def check_password(password, hashed_password):
     return bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8'))
 
-# Username validation
 def validate_username(username):
     if not (8 <= len(username) <= 10):
         return False, "Username must be between 8 and 10 characters long."
@@ -57,7 +57,6 @@ def validate_username(username):
         return False, "Username can only contain letters, numbers, underscores, apostrophes, and periods."
     return True, ""
 
-# Password validation
 def validate_password(password):
     if not (12 <= len(password) <= 30):
         return False, "Password must be between 12 and 30 characters long."
@@ -71,20 +70,36 @@ def validate_password(password):
         return False, "Password must contain at least one special character."
     return True, ""
 
-# Traveller Data Validation
 def validate_zip_code(zip_code):
     if not re.match(r"^\d{4}[A-Z]{2}$", zip_code):
         return False, "Zip Code must be in DDDDXX format (e.g., 1234AB)."
     return True, ""
 
+def validate_city(city):
+    valid_cities = {
+    "Centrum",
+    "Kralingen",
+    "Delfshaven",
+    "Noord",
+    "Feijenoord",
+    "Overschie",
+    "Hillegersberg-Schiebroek",
+    "Prins Alexander",
+    "Charlois",
+    "Hoek van Holland"
+    }
+    if city not in valid_cities:
+        return False, f"City must be one of: {', '.join(valid_cities)}."
+    return True, ""
+
 def validate_mobile_phone(phone_number):
     if not re.match(r"^\d{8}$", phone_number):
-        return False, "Mobile Phone must be 8 digits (e.g., 12345678)."
+        return False, "Mobile Phone must be exactly 8 digits (e.g., 12345678)."
     return True, ""
 
 def validate_driving_license(license_number):
     if not re.match(r"^[A-Z]{1,2}\d{7,8}$", license_number):
-        return False, "Driving license must be XXDDDDDDD or XDDDDDDDD format."
+        return False, "Driving license must be in the format XXDDDDDDD or XDDDDDDDD."
     return True, ""
 
 def validate_serial_number(serial_number):
@@ -96,8 +111,10 @@ def validate_location(latitude, longitude):
     try:
         lat = float(latitude)
         lon = float(longitude)
+
         if len(str(lat).split('.')[-1]) > 5 or len(str(lon).split('.')[-1]) > 5:
-             return False, "Latitude and Longitude must have at most 5 decimal places."
+            return False, "Latitude and Longitude must have at most 5 decimal places."
+
         if not (51.85 < lat < 52.05 and 4.35 < lon < 4.65):
             return False, "Location must be within the Rotterdam region."
     except ValueError:
@@ -106,10 +123,9 @@ def validate_location(latitude, longitude):
 
 def validate_iso_date(date_string):
     if not re.match(r"^\d{4}-\d{2}-\d{2}$", date_string):
-        return False, "Date must be in DD-MM-YYYY format."
+        return False, "Date must be in ISO 8601 format yyyy-mm-dd."
     try:
-        from datetime import datetime
-        datetime.strptime(date_string, "%d-%m-%Y")
+        datetime.strptime(date_string, "%Y-%m-%d")
     except ValueError:
         return False, "Invalid date value."
     return True, ""
@@ -127,7 +143,7 @@ def decrypt_traveller_data(row):
     if not row:
         return None
     decrypted_row = list(row)
-    encrypted_indexes = list(range(1, 12))  # indexes 1 to 11 inclusive
+    encrypted_indexes = list(range(1, 12))
     for i in encrypted_indexes:
         decrypted_row[i] = decrypt_data(decrypted_row[i])
     return tuple(decrypted_row)
