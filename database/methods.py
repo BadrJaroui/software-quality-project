@@ -98,3 +98,30 @@ class DatabaseManager:
         where_clause = ' AND '.join([f"{k} = ?" for k in criteria])
         query = f"SELECT * FROM users WHERE {where_clause}" if criteria else "SELECT * FROM users"
         return self.execute_query(query, tuple(criteria.values()), fetch_all=True)
+
+    # -------- RESTORE CODES --------
+    def create_restore_code(self, **fields):
+        keys = ', '.join(fields.keys())
+        placeholders = ', '.join(['?'] * len(fields))
+        query = f"INSERT INTO restore_codes ({keys}) VALUES ({placeholders})"
+        return self.execute_query(query, tuple(fields.values()))
+    
+    def delete_restore_code(self, code_id):
+        return self.execute_query("DELETE FROM restore_codes WHERE id = ?", (code_id,))
+    
+    def get_restore_code(self, code, sys_admin_id):
+        query = """
+            SELECT id, backup_file_name, is_used
+            FROM restore_codes
+            WHERE code = ? AND system_admin_id = ?
+        """
+        return self.execute_query(query, (code, sys_admin_id), fetch_one=True)
+    
+    def get_backup_file_name(self, code, sys_admin_id):
+        query = """
+            SELECT backup_file_name
+            FROM restore_codes
+            WHERE code = ? AND system_admin_id = ?
+        """
+        result = self.execute_query(query, (code, sys_admin_id), fetch_one=True)
+        return result[0] if result else None
