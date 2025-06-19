@@ -1,5 +1,5 @@
 import sqlite3
-from security.security import encrypt_data
+from security.security import decrypt_data
 
 class DatabaseManager:
     def __init__(self, db_path):
@@ -101,10 +101,14 @@ class DatabaseManager:
         return self.execute_query(query, tuple(criteria.values()), fetch_all=True)
     
     def is_username_unique(self, username):
-        encrypted_username = encrypt_data(username)
-        query = "SELECT COUNT(*) FROM users WHERE username = ?"
-        result = self.execute_query(query, (encrypted_username,), fetch_one=True)
-        return result[0] == 0
+        query = "SELECT username FROM users"
+        encrypted_usernames = self.execute_query(query, fetch_all=True)
+        
+        for (encrypted_username,) in encrypted_usernames:
+            decrypted_username = decrypt_data(encrypted_username)
+            if decrypted_username == username:
+                return False
+        return True
 
     # -------- RESTORE CODES --------
     def create_restore_code(self, **fields):
