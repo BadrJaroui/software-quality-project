@@ -4,6 +4,7 @@ from frontend.search import search_traveller_ui, search_scooter_ui
 from frontend.delete import delete_traveller, delete_scooter
 from database.backup_db import restore_db_with_code
 from database.backup_db import backup_db
+from logs.logging_file import view_log_file, check_log_file_exists
 from database.methods import DatabaseManager
 from utils.CurrentLoggedInUser import currentUserID
 from utils.utils import clear_terminal
@@ -23,6 +24,7 @@ def sys_admin_ui():
         print("8. Delete scooter")
         print("9. Backup system")
         print("0. Logout")
+        print("L. View logs")
         print("R. Restore backup")
         print("Q. Update password")
         print("Z. Delete own account")
@@ -79,6 +81,12 @@ def sys_admin_ui():
             clear_terminal()
             currentUserID = None
             break
+
+        if input_value.lower() == "l":
+            clear_terminal()
+            check_log_file_exists()
+            view_log_file("logs/activity_log.csv")
+            input("Press Enter to return to menu.")
 
         if input_value.lower() == "q":
             clear_terminal()
