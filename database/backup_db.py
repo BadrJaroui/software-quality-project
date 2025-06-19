@@ -2,7 +2,7 @@ import os
 import sqlite3
 import zipfile
 
-def backup_db(zip_path, source_db="database/scooter.db"):
+def backup_db(zip_path, source_db="database/data/urban_mobility.db"):
     folder = os.path.dirname(zip_path)
     if folder and not os.path.exists(folder):
         os.makedirs(folder)

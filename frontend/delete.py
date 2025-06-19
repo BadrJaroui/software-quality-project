@@ -1,4 +1,5 @@
 from database.methods import DatabaseManager
+from utils.CurrentLoggedInUser import currentUserID
 
 def delete_traveller():
     db = DatabaseManager("database/data/urban_mobility.db")
