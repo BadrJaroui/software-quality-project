@@ -234,38 +234,42 @@ def add_scooter():
 def add_user():
     db = DatabaseManager("database/data/urban_mobility.db")
 
-    valid_input = True
+    errors = []
 
     username = input("Enter a username: ")
+    if not db.is_username_unique(username):
+        errors.append("Username already in use.")
     valid, message = validate_username(username)
     if not valid:
-        print(f"Username not valid: {message}")
-        valid_input = False
+        errors.append(f"Username not valid: {message}")
 
     password = input("Enter a password: ")
     valid, message = validate_password(password)
     if not valid:
-        print(f"Password not valid: {message}")
-        valid_input = False
+        errors.append(f"Password not valid: {message}")
     else:
         password_hash = hash_password(password)
 
     role = input("Enter a role (e.g., Super Admin, System Admin, Service Engineer): ")
+    if role.lower() != "super admin" and role.lower() != "system admin" and role.lower() != "service engineer":
+        errors.append("Invalid role.")
     if not role:
-        print("Role cannot be empty.")
-        valid_input = False
+        errors.append("Role cannot be empty.")
 
     first_name = input("Enter a first name: ")
     if not first_name:
-        print("First name cannot be empty.")
-        valid_input = False
+        errors.append("First name cannot be empty.")
 
     last_name = input("Enter a last name: ")
     if not last_name:
-        print("Last name cannot be empty.")
-        valid_input = False
+        errors.append("Last name cannot be empty.")
 
-    if valid_input:
+    if errors:
+        print("Input errors found:")
+        for error in errors:
+            print(f"- {error}")
+        print("User not added due to invalid input.")
+    else:
         registration_date = datetime.now().strftime("%Y-%m-%d")
 
         user_data = {
@@ -278,30 +282,30 @@ def add_user():
         }
 
         db.create_user(**user_data)
-    else:
-        print("User not added due to invalid input.")
 
 def add_restore_code():
     db = DatabaseManager("database/data/urban_mobility.db")
 
-    valid_input = True
+    errors = []
 
     code = input("Enter a restore code: ")
     if not code:
-        print("Restore code cannot be empty.")
-        valid_input = False
+        errors.append("Restore code cannot be empty.")
 
     sys_admin_id = input("Enter the ID of the system admin: ")
     if not sys_admin_id.isdigit():
-        print("System admin ID must be a number.")
-        valid_input = False
+        errors.append("System admin ID must be a number.")
 
     backup_file_name = input("Enter the backup file name: ")
     if not backup_file_name:
-        print("Backup file name cannot be empty.")
-        valid_input = False
+        errors.append("Backup file name cannot be empty.")
 
-    if valid_input:
+    if errors:
+        print("Input errors found:")
+        for error in errors:
+            print(f"- {error}")
+        print("Restore code not added due to invalid input.")
+    else:
         generated_at = datetime.now().strftime("%Y-%m-%d")
         is_used = 0
 
@@ -314,5 +318,3 @@ def add_restore_code():
         }
 
         db.create_restore_code(**restore_code_data)
-    else:
-        print("Restore code not added due to invalid input.")

@@ -1,4 +1,5 @@
 from database.methods import DatabaseManager
+from datetime import datetime
 from security.security import hash_password, check_password, validate_password, validate_username, encrypt_data, decrypt_data
 from security.security import validate_zip_code, validate_mobile_phone, validate_driving_license, validate_serial_number, validate_location, validate_iso_date, validate_city
 from utils.utils import update_password
@@ -152,31 +153,51 @@ def update_user():
     first_name = input("First name: ")
     last_name = input("Last name: ")
 
+    errors = []
     updates = {}
 
     if username:
+        username = input("Enter a username: ")
+        if not db.is_username_unique(username):
+            errors.append("Username already in use.")
+            
         valid, message = validate_username(username)
         if not valid:
-            print(f"Username not valid: {message}")
-            return
-        updates["username"] = encrypt_data(username)
+            errors.append(f"Username not valid: {message}")
+        else:
+            updates["username"] = encrypt_data(username)
 
     if password:
         valid, message = validate_password(password)
         if not valid:
-            print(f"Password not valid: {message}")
-            return
-        updates["password_hash"] = encrypt_data(hash_password(password))
+            errors.append(f"Password not valid: {message}")
+        else:
+            updates["password_hash"] = encrypt_data(hash_password(password))
 
     if role:
-        updates["role"] = role
+        # Validate role like add_user does
+        if role.lower() not in ["super admin", "system admin", "service engineer"]:
+            errors.append("Invalid role.")
+        else:
+            updates["role"] = role
+
     if first_name:
         updates["first_name"] = encrypt_data(first_name)
+
     if last_name:
         updates["last_name"] = encrypt_data(last_name)
 
-    if updates:
-        db.update_user(int(user_id), **updates)
+    if errors:
+        print("Input errors found:")
+        for error in errors:
+            print(f"- {error}")
+        print("User not updated due to invalid input.")
+    elif updates:
+        try:
+            db.update_user(int(user_id), **updates)
+            print("User updated successfully.")
+        except Exception as e:
+            print(f"An error occurred during update: {e}")
     else:
         print("No updates provided.")
 
