@@ -62,13 +62,13 @@ def update_scooter():
     if brand: updates["brand"] = brand
     if model: updates["model"] = model
     if serial_number: updates["serial_number"] = serial_number
-    if top_speed: updates["top_speed"] = float(top_speed)
-    if battery_capacity: updates["battery_capacity"] = float(battery_capacity)
-    if state_of_charge: updates["state_of_charge"] = float(state_of_charge)
+    if top_speed: updates["top_speed"] = top_speed
+    if battery_capacity: updates["battery_capacity"] = battery_capacity
+    if state_of_charge: updates["state_of_charge"] = state_of_charge
     if target_range: updates["target_range_soc"] = target_range
     if location: updates["location_enc"] = location
-    if out_of_service_status: updates["out_of_service_status"] = int(out_of_service_status)
-    if mileage: updates["mileage"] = float(mileage)
+    if out_of_service_status: updates["out_of_service_status"] = out_of_service_status
+    if mileage: updates["mileage"] = mileage
     if last_maintenance_date: updates["last_maintenance_date"] = last_maintenance_date
 
     if updates:

@@ -102,3 +102,23 @@ def add_user():
     
     db.create_user(**user_data)
     print("User added successfully!")
+
+def add_restore_code():
+    db = DatabaseManager("database/data/urban_mobility.db")
+
+    code = input("Enter a restore code: ")
+    sys_admin_id = input("Enter the ID of the system admin: ")
+    backup_file_name = input("Enter the backup file name: ")
+    generated_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    is_used = 0  # default to not used
+
+    restore_code_data = {
+        "code": code,
+        "system_admin_id": sys_admin_id,
+        "backup_file_name": backup_file_name,
+        "is_used": is_used,
+        "generated_at": generated_at
+    }
+
+    db.create_restore_code(**restore_code_data)
+    print("Restore code added successfully!")
