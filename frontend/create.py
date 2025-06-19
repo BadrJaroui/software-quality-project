@@ -1,5 +1,5 @@
 from database.methods import DatabaseManager
-from security.security import hash_password, validate_password, validate_username
+from security.security import hash_password, validate_password, validate_username, encrypt_data
 from datetime import datetime
 
 def add_traveller():
@@ -19,17 +19,17 @@ def add_traveller():
     registration_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     traveller_data = {
-        "first_name_enc": first_name,
-        "last_name_enc": last_name,
-        "birthday_enc": birthday,
-        "gender_enc": gender,
-        "street_name_enc" : street_name,
-        "house_number_enc" : house_number_enc,
-        "zip_code_enc": zipcode,
-        "city_enc": city,
-        "email_address_enc": email,
-        "mobile_phone_enc": number,
-        "driving_license_number_enc": license_number,
+        "first_name_enc": encrypt_data(first_name),
+        "last_name_enc": encrypt_data(last_name),
+        "birthday_enc": encrypt_data(birthday),
+        "gender_enc": encrypt_data(gender),
+        "street_name_enc" : encrypt_data(street_name),
+        "house_number_enc" : encrypt_data(house_number_enc),
+        "zip_code_enc": encrypt_data(zipcode),
+        "city_enc": encrypt_data(city),
+        "email_address_enc": encrypt_data(email),
+        "mobile_phone_enc": encrypt_data(number),
+        "driving_license_number_enc": encrypt_data(license_number),
         "registration_date" : registration_date
     }
     db.create_traveller(**traveller_data)
@@ -54,12 +54,12 @@ def add_scooter():
     scooter_data = {
         "brand": brand,
         "model": model,
-        "serial_number": serial_number,
+        "serial_number": encrypt_data(serial_number),
         "top_speed": top_speed,
         "battery_capacity" : battery_capacity,
         "state_of_charge" : state_of_charge,
         "target_range_soc": target_range,
-        "location_enc": location,
+        "location_enc": encrypt_data(location),
         "out_of_service_status": out_of_service_status,
         "mileage": mileage,
         "last_maintenance_date": last_maintenance_date,
@@ -92,11 +92,11 @@ def add_user():
     registration_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     user_data = {
-        "username": username,
-        "password_hash": password_hash,
+        "username": encrypt_data(username),
+        "password_hash": encrypt_data(password_hash),
         "role": role,
-        "first_name": first_name,
-        "last_name": last_name,
+        "first_name": encrypt_data(first_name),
+        "last_name": encrypt_data(last_name),
         "registration_date": registration_date
     }
     
@@ -113,7 +113,7 @@ def add_restore_code():
     is_used = 0  # default to not used
 
     restore_code_data = {
-        "code": code,
+        "code": encrypt_data(code),
         "system_admin_id": sys_admin_id,
         "backup_file_name": backup_file_name,
         "is_used": is_used,

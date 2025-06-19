@@ -1,6 +1,6 @@
 import os
 from database.methods import DatabaseManager
-from security.security import hash_password
+from security.security import hash_password, encrypt_data
 
 def clear_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -9,7 +9,7 @@ def update_password(id, new_pass):
     db = DatabaseManager("database/data/urban_mobility.db")
 
     hashed_pass = hash_password(new_pass)
-    update_dict = {"password_hash" : hashed_pass}
+    update_dict = {"password_hash" : encrypt_data(hashed_pass)}
     db.update_user(id, **update_dict)
 
 def get_role_by_id(id):

@@ -1,10 +1,11 @@
 from database.methods import DatabaseManager
+from security.security import decrypt_scooter_data, decrypt_traveller_data
 
 def search_scooter_ui():
     db = DatabaseManager("database/data/urban_mobility.db")
 
     while True:
-        print("Search on:\n1. ID\n2. serial number")
+        print("Search on:\n1. ID\n2. Serial Number")
         user_input = input()
         scooter = None
 
@@ -13,12 +14,13 @@ def search_scooter_ui():
             id = input()
             scooter = db.search_scooter(id, None)
         elif user_input == "2":
-            print("Type a serial number:")
+            print("Type a Serial Number:")
             serial = input()
             scooter = db.search_scooter(None, serial)
 
-        if not scooter == None:
-            print(scooter)
+        if scooter is not None:
+            decrypted_scooter = decrypt_scooter_data(scooter)
+            print(decrypted_scooter)
             break
         else:
             print("Scooter does not exist.")
@@ -49,8 +51,9 @@ def search_traveller_ui():
             continue
 
         if traveller is not None:
+            decrypted_traveller = decrypt_traveller_data(traveller)
             print("Traveller found:")
-            print(traveller)
+            print(decrypted_traveller)
             break
         else:
             print("Traveller not found.")
