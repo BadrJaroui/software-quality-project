@@ -2,8 +2,7 @@ from frontend.create import add_traveller, add_scooter
 from frontend.update import update_traveller, update_scooter, update_password_ui
 from frontend.search import search_traveller_ui, search_scooter_ui
 from frontend.delete import delete_traveller, delete_scooter
-from database.backup_db import restore_db_with_code
-from database.backup_db import backup_db
+from database.backup_db import restore_db_with_code, backup_db
 from logs.logging_file import view_log_file, check_log_file_exists
 from database.methods import DatabaseManager
 from utils.CurrentLoggedInUser import currentUserID

@@ -1,5 +1,5 @@
 from database.methods import DatabaseManager
-from security.security import hash_password, check_password, validate_password, validate_username
+from security.security import hash_password, check_password, validate_password, validate_username, encrypt_data
 from utils.utils import update_password
 from utils.utils import get_role_by_id
 from utils.CurrentLoggedInUser import currentUserID
@@ -21,15 +21,15 @@ def update_traveller():
     license_number = input("License number: ")
 
     updates = {}
-    if first_name: updates["first_name_enc"] = first_name
-    if last_name: updates["last_name_enc"] = last_name
-    if birthday: updates["birthday_enc"] = birthday
-    if gender: updates["gender_enc"] = gender
-    if zipcode: updates["zipcode_enc"] = zipcode
-    if city: updates["city_enc"] = city
-    if email: updates["email_enc"] = email
-    if number: updates["number_enc"] = number
-    if license_number: updates["license_number_enc"] = license_number
+    if first_name: updates["first_name_enc"] = encrypt_data(first_name)
+    if last_name: updates["last_name_enc"] = encrypt_data(last_name)
+    if birthday: updates["birthday_enc"] = encrypt_data(birthday)
+    if gender: updates["gender_enc"] = encrypt_data(gender)
+    if zipcode: updates["zipcode_enc"] = encrypt_data(zipcode)
+    if city: updates["city_enc"] = encrypt_data(city)
+    if email: updates["email_enc"] = encrypt_data(email)
+    if number: updates["number_enc"] = encrypt_data(number)
+    if license_number: updates["license_number_enc"] = encrypt_data(license_number)
 
     if updates:
         db.update_traveller(int(traveller_id), **updates)
@@ -61,12 +61,12 @@ def update_scooter():
     updates = {}
     if brand: updates["brand"] = brand
     if model: updates["model"] = model
-    if serial_number: updates["serial_number"] = serial_number
+    if serial_number: updates["serial_number"] = encrypt_data(serial_number)
     if top_speed: updates["top_speed"] = top_speed
     if battery_capacity: updates["battery_capacity"] = battery_capacity
     if state_of_charge: updates["state_of_charge"] = state_of_charge
     if target_range: updates["target_range_soc"] = target_range
-    if location: updates["location_enc"] = location
+    if location: updates["location_enc"] = encrypt_data(location)
     if out_of_service_status: updates["out_of_service_status"] = out_of_service_status
     if mileage: updates["mileage"] = mileage
     if last_maintenance_date: updates["last_maintenance_date"] = last_maintenance_date
@@ -95,21 +95,21 @@ def update_user():
         if not valid:
             print(f"Username not valid: {message}")
             return
-        updates["username"] = username
+        updates["username"] = encrypt_data(username)
 
     if password:
         valid, message = validate_password(password)
         if not valid:
             print(f"Password not valid: {message}")
             return
-        updates["password_hash"] = hash_password(password)
+        updates["password_hash"] = encrypt_data(hash_password(password))
 
     if role:
         updates["role"] = role
     if first_name:
-        updates["first_name"] = first_name
+        updates["first_name"] = encrypt_data(first_name)
     if last_name:
-        updates["last_name"] = last_name
+        updates["last_name"] = encrypt_data(last_name)
 
     if updates:
         db.update_user(int(user_id), **updates)

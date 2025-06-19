@@ -113,3 +113,29 @@ def validate_iso_date(date_string):
     except ValueError:
         return False, "Invalid date value."
     return True, ""
+
+def decrypt_scooter_data(row):
+    if not row:
+        return None
+    decrypted_row = list(row)
+    encrypted_indexes = [3, 8]
+    for i in encrypted_indexes:
+        decrypted_row[i] = decrypt_data(decrypted_row[i])
+    return tuple(decrypted_row)
+
+def decrypt_traveller_data(row):
+    if not row:
+        return None
+    decrypted_row = list(row)
+    encrypted_indexes = list(range(1, 12))  # indexes 1 to 11 inclusive
+    for i in encrypted_indexes:
+        decrypted_row[i] = decrypt_data(decrypted_row[i])
+    return tuple(decrypted_row)
+
+def decrypt_user_data(row):
+    if not row:
+        return None
+    decrypted_row = list(row)
+    for i in range(1, 6):
+        decrypted_row[i] = decrypt_data(decrypted_row[i])
+    return tuple(decrypted_row)
